@@ -1,0 +1,91 @@
+﻿@page "/world_character_master"
+@using OtherWorldBaseProduct.Shared
+@using OtherWorldBaseProduct.Shared.ServerData
+
+<PageTitle>世界登場キャラ設定(WorldCharacter)</PageTitle>
+
+
+<h2 style="border-bottom: solid 4px;">ワールド選択</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name (C)</th>
+            <th>選択</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var worldBaseMasterData in worldManager.worldMasters)
+        {
+            <tr>
+                <td>@worldBaseMasterData.id</td>
+                <td>@worldBaseMasterData.name</td>
+                <td></td>
+            </tr>            
+        }
+    </tbody>
+</table>
+
+<h3 style="border-bottom: solid 4px;">エリア選択</h3>
+
+
+<table class="table">
+    <tbody>
+        <tr>
+            <td>id</td>
+            <td>エリア名</td>
+            <td>説明</td>
+        </tr>
+        <tr>
+            <td>1000</td>
+            <td>状内</td>
+            <td>世界転生時に住んでいる町</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3 style="border-bottom: solid 4px; ">登場キャラ設定</h3>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <td>イベントid</td>
+            <td>イベント名</td>
+            <td>次のイベント</td>
+            <td>アクションタイプ</td>
+        </tr>
+        <tr>
+            <td>100</td>
+            <td>メイド</td>
+            <td>-</td>
+            <td>ショップ購入処理</td>
+        </tr>
+        <tr>
+            <td>101</td>
+            <td>ライバル出現</td>
+            <td>102</td>
+            <td>会話</td>
+        </tr>
+        <tr>
+            <td>102</td>
+            <td>ライバル出現 - 戦闘開始 -</td>
+            <td>-</td>
+            <td>戦闘</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+@code {
+
+    private WorldManager worldManager { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        worldManager = new WorldManager();
+        worldManager.DataRead();
+    }
+}

@@ -1,0 +1,98 @@
+﻿@page "/client_data_manager"
+@using OtherWorldBaseProduct.Shared
+@using OtherWorldBaseProduct.Shared.ViewData
+@inject HttpClient Http
+
+<PageTitle>クライアント向けデータ出力(ClientDataManager)</PageTitle>
+
+
+<h2>データバイナリセット</h2>
+
+<table class="table">
+    <tbod>
+        <tr>
+            <td class="card-title">ダウンロードバージョン</td>
+            <td>@clientDataVersion.version</td>
+        </tr>
+        <tr>
+            <td class="card-title">最終更新日時</td>
+            <td>@clientDataVersion.updateDateTime</td>
+        </tr>
+    </tbod>
+</table>
+
+<h2>パッケージ一覧</h2>
+
+<button class="btn btn-primary">パッケージ情報投入</button>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>説明</th>
+            <th>作成日時</th>
+            <th>最終更新日時</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var clientDataHistory in clientDataHistories)
+        {
+            <tr>
+                <td>@clientDataHistory.id</td>
+                <td>@clientDataHistory.comment</td>
+                <td>@clientDataHistory.createDateTime</td>
+                <td>@clientDataHistory.updateDateTime</td>
+                <td><button class="btn">ダウンロードバージョンに設定</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+
+    /// <summary>
+    /// 今バイナリで遊んでいるデータバージョン
+    /// </summary>
+    public ClientDataVersion clientDataVersion { get; set; }
+
+    /// <summary>
+    /// クライアントデータの履歴一覧情報
+    /// </summary>
+    public List<ClientDataHistory> clientDataHistories { get; set; }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        clientDataVersion = new ClientDataVersion();
+        clientDataHistories = new List<ClientDataHistory>();
+
+
+        // 現在設定中のデータバージョン
+        clientDataVersion.id = 1;
+        clientDataVersion.version = 100;
+        clientDataVersion.updateDateTime = DateTime.Now;
+
+
+        // 過去履歴一覧
+        var clientDataFirstHistory = new ClientDataHistory();
+        clientDataFirstHistory.createDateTime = DateTime.Now;
+        clientDataFirstHistory.id = 1;
+        clientDataFirstHistory.comment = "初期パッケージ";
+
+        clientDataHistories.Add(clientDataFirstHistory);
+
+        var clientDataSecondHistory = new ClientDataHistory();
+        clientDataSecondHistory.createDateTime = DateTime.Now;
+        clientDataSecondHistory.id = 2;
+        clientDataSecondHistory.comment = "ダンジョン追加";
+
+        clientDataHistories.Add(clientDataSecondHistory);
+
+
+
+
+    }
+}

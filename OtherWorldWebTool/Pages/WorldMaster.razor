@@ -1,0 +1,112 @@
+﻿@page "/world_master"
+@using OtherWorldBaseProduct.Shared
+@using OtherWorldBaseProduct.Shared.ServerData
+@using OtherWorldBaseProduct.Shared.Model
+
+<PageTitle>転生先セットアップ(WorldCommandList)</PageTitle>
+
+<h1>世界情報更新</h1>
+
+
+<h2 style="border-bottom:solid 4px;">転生先情報</h2>
+
+<button @onclick="OnSetupUpdate">転生先更新</button>
+
+@if (isSetupUpdate) {
+    <h3 style="border-bottom: solid 4px">転生先情報を更新しました。</h3>
+}
+
+<table class="table">
+    <tbody>
+        <tr>
+            <td>転生先世界番号</td><td><input type="text" @bind="@worldManager.worldChangeSetupconfig.worldId" /></td>
+        </tr>
+        <tr>
+            <td>転生者潜在基準</td><td>@worldManager.worldChangeSetupconfig.condition</td>
+        </tr>
+
+    </tbody>
+</table>
+
+<h2 style="border-bottom:solid 4px;">異世界一覧</h2>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name (C)</th>
+            <th>初期エリア</th>
+            <th>召喚先座標</th>
+            <th>役割</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var worldBaseMaster in worldManager.worldMasters)
+        {
+            <tr>
+                <td>@worldBaseMaster.id</td>
+                <td>@worldBaseMaster.name</td>
+                <td>@worldBaseMaster.areaid</td>
+                <td>(@worldBaseMaster.startPosition.x, @worldBaseMaster.startPosition.y, @worldBaseMaster.startPosition.z)</td>
+                <td>@worldBaseMaster.startRole.id, @worldBaseMaster.startRole.name<br/></td>
+            </tr>
+            @if (@worldBaseMaster.startRole.whiteCommands.Count > 0)
+            {
+               <tr>
+                    <td colspan="3">発動可能コマンド</td>
+               </tr>
+                <tr>
+                    <td>コマンド番号</td>
+                    <td>名称</td>
+                    <td>発動効果</td>
+               </tr>
+
+               <tr>
+                    @foreach(var worldCommand in @worldBaseMaster.startRole.whiteCommands)
+                    {
+                        <td>@worldCommand.id</td>
+                        <td>@worldCommand.name</td>
+                        <td>@worldCommand.effectName</td>   
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+@code {
+
+    /// <summary>
+    /// 転生先情報読み込みクラス
+    /// </summary>
+    public WorldManager worldManager { get; set; }
+
+    private bool isSetupUpdate { set; get; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        isSetupUpdate = false;
+        worldManager = new WorldManager();
+        try
+        {
+            worldManager.DataRead();
+
+        }
+        catch (Exception e)
+        {
+            var eResult = e.Message;
+        }
+
+    }
+
+    private void OnSetupUpdate()
+    {
+        worldManager.DataUpdate();
+        isSetupUpdate = true;
+
+    }
+}

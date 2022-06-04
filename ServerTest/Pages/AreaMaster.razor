@@ -1,0 +1,50 @@
+﻿@page "/area_master"
+@using OtherWorldBaseProduct.Shared
+@inject HttpClient Http
+
+<PageTitle>エリアマスター(AreaMaster)</PageTitle>
+
+
+<h2>ワールド選択</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name (C)</th>
+            <th>選択</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>3</td>
+            <td>闇魔法ワールド</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>エリア一覧</h2>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <td>id</td>
+            <td>エリア名</td>
+            <td>説明</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>はじまりの部屋</td>
+            <td>説明してくれる何かが存在する</td>
+
+        </tr>
+    </tbody>
+</table>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+}

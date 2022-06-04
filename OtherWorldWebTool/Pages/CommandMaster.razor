@@ -1,0 +1,39 @@
+﻿@page "/command_master"
+@using OtherWorldBaseProduct.Shared
+
+<PageTitle>コマンド一覧(WorldCommandList)</PageTitle>
+
+<h1>コマンド一覧</h1>
+
+<p></p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name (C)</th>
+            <th>発動情報</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>寝る</td>
+            <td>体力が回復する</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>購入申請</td>
+            <td>相手からアイテムを買う</td>
+        </tr>
+    </tbody>
+</table>
+
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+}

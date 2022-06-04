@@ -1,0 +1,114 @@
+﻿@page "/simulator/world_caffeteria"
+@using OtherWorldBaseProduct.Shared
+@using OtherWorldBaseProduct.Shared.ServerData
+@using OtherWorldBaseProduct.Shared.Model.Food
+@using System.Text.Json
+@using System.Text.Json.Serialization;
+@inject IHttpClientFactory ClientFactory
+
+<PageTitle>転生食堂シミュレータ(WorldCafeteria)</PageTitle>
+
+
+<h1>転生食堂シミュレータ(WorldCafeteria)</h1>
+
+
+<h2 style="border-bottom: solid 4px;">へい、いらっしゃい</h2>
+
+@if (totalCal < 2000)
+{
+    <h3 style="border-bottom: solid 4px;">さてと、何を頼むかな</h3>
+
+
+    <button @onclick="OnWorldRice">ごはん注文(orderrice)</button>
+
+    <button @onclick="OnWorldPizza">ピザ注文(orderpizza)</button>
+
+
+}
+else
+{
+    <h3 style="border-bottom: solid 4px;">今日はもう、食べたから帰るよ</h3>
+    
+}
+
+
+
+
+@if (worldClickCnt == 1)
+{
+    <h3 style="border-bottom: solid 4px;">調理完了</h3>
+
+    <h4>転生先名称 : @foodResult.foodData.Name  </h4>
+    <h4>転生先カロリー : @foodResult.foodData.Cal  </h4>
+
+}
+
+
+@code {
+
+    private FoodResult foodResult { get; set; }
+
+
+    private int worldClickCnt { get; set; }
+
+    private int orderNum { get; set; }
+
+    private int selectWorldIdx { get; set; }
+
+    private int totalCal  { get; set; }
+
+
+    private bool isWaiting { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        isWaiting = true;
+        totalCal = 0;
+        selectWorldIdx = 0;
+    }
+
+    void WorldSelectChange(ChangeEventArgs e)
+    {
+    }
+
+    private async Task OnWorldRice()
+    {
+        worldClickCnt = 0;
+        orderNum = 0;
+        await FoodRequest();
+    }
+
+    private async Task OnWorldPizza()
+    {
+        worldClickCnt = 0;
+        orderNum = 1;
+        await FoodRequest();
+
+    }
+
+    private async Task FoodRequest()
+    {
+
+        var request = new HttpRequestMessage(HttpMethod.Get,
+           string.Format("https://otherbasefood.azurewebsites.net/api/food?code=ZytGz0HUjLTfLaKVvv0fEpoUIGPOVw%2FR7VKmdcENvhDYCG7XF2qfaQ%3D%3D&num={0}", orderNum));
+        request.Headers.Add("Accept", "application/json");
+        request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
+
+        var client = ClientFactory.CreateClient();
+
+        var response = await client.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            using var responseStream = await response.Content.ReadAsStreamAsync();
+            foodResult = await JsonSerializer.DeserializeAsync<FoodResult>(responseStream);
+            worldClickCnt = 1;
+            totalCal += foodResult.foodData.Cal;
+        }
+        else
+        {
+        }
+
+
+    }
+}

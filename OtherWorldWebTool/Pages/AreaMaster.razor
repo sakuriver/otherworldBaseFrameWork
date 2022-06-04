@@ -1,0 +1,58 @@
+﻿@page "/area_master"
+@using OtherWorldBaseProduct.Shared
+@using OtherWorldBaseProduct.Shared.ServerData
+
+<PageTitle>エリアマスター(AreaMaster)</PageTitle>
+
+
+<h2>ワールド選択</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name (C)</th>
+            <th>選択</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var worldBaseMasterData in worldManager.worldMasters)
+        {
+            <tr>
+                <td>@worldBaseMasterData.id</td>
+                <td>@worldBaseMasterData.name</td>
+                <td></td>
+            </tr>            
+        }
+    </tbody>
+</table>
+
+<h2>エリア一覧</h2>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <td>id</td>
+            <td>エリア名</td>
+            <td>説明</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>はじまりの部屋</td>
+            <td>説明してくれる何かが存在する</td>
+
+        </tr>
+    </tbody>
+</table>
+
+@code {
+
+    private WorldManager worldManager { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        worldManager = new WorldManager();
+        worldManager.DataRead();
+
+    }
+}

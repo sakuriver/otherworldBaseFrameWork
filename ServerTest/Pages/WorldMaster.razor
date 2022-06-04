@@ -1,0 +1,150 @@
+﻿@page "/world_master"
+@using OtherWorldBaseProduct.Shared
+@using OtherWorldBaseProduct.Shared.ServerData
+@using OtherWorldBaseProduct.Shared.Model
+@inject HttpClient Http
+
+<PageTitle>コマンド一覧(WorldCommandList)</PageTitle>
+
+<h1>コマンド一覧</h1>
+
+<p></p>
+
+<h2 style="border-bottom:solid 4px;">転生先情報</h2>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <td>転生先世界番号</td><td>@worldManager.worldChangeSetupconfig.worldId</td>
+        </tr>
+        <tr>
+            <td>転生者潜在基準</td><td>@worldManager.worldChangeSetupconfig.condition</td>
+        </tr>
+
+    </tbody>
+</table>
+
+<h2 style="border-bottom:solid 4px;">異世界一覧</h2>
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name (C)</th>
+            <th>初期エリア</th>
+            <th>召喚先座標</th>
+            <th>役割</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var worldBaseMaster in worldManager.worldMasters)
+        {
+            <tr>
+                <td>@worldBaseMaster.id</td>
+                <td>@worldBaseMaster.name</td>
+                <td>@worldBaseMaster.areaid</td>
+                <td>(@worldBaseMaster.startPosition.x, @worldBaseMaster.startPosition.y, @worldBaseMaster.startPosition.z)</td>
+                <td>@worldBaseMaster.startRole.id, @worldBaseMaster.startRole.name<br/></td>
+            </tr>
+            @if (@worldBaseMaster.startRole.whiteCommands.Count > 0)
+            {
+               <tr>
+                    <td colspan="3">発動可能コマンド</td>
+               </tr>
+                <tr>
+                    <td>コマンド番号</td>
+                    <td>名称</td>
+                    <td>発動効果</td>
+               </tr>
+
+               <tr>
+                    @foreach(var worldCommand in @worldBaseMaster.startRole.whiteCommands)
+                    {
+                        <td>@worldCommand.id</td>
+                        <td>@worldCommand.name</td>
+                        <td>@worldCommand.effectName</td>   
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+@code {
+
+    /// <summary>
+    /// 転生先情報読み込みクラス
+    /// </summary>
+    public WorldManager worldManager { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        worldManager = new WorldManager();
+        try
+        {
+              var pathResult = System.IO.Path.Combine(new string[] { @"/devellop", "OtherWorldApp", "world_base_master.csv" });
+            var pathResul1 = System.IO.Path.Combine(new string[] { @"/develop" });
+            var pathResult2 = System.IO.Path.Combine(new string[] { @"/develop", "OtherWorldApp" });
+            var pathResult3 = System.IO.Path.Combine(new string[] { @"/develop", "OtherWorldApp", "world_base_master.csv" });
+
+            var filePath = @"c:\develop\OtherWorldApp\world_base_master.csv";
+            var result = Directory.Exists(pathResul1);
+            var result2 = Directory.Exists(pathResult2);
+            var result3 = Directory.Exists(pathResult3);
+            var result4 = Path.GetFullPath(".\\");
+            var currentPath = System.IO.Directory.GetCurrentDirectory();
+            var filePathResult = Directory.Exists(currentPath);
+            var files = Directory.GetFiles(currentPath + "/home");
+
+            worldManager.DataRead();
+
+        }
+        catch (Exception e)
+        {
+            var eResult = e.Message;
+        }
+
+        // 異世界転生先情報
+        worldManager.worldChangeSetupconfig = new WorldChangeSetupconfig();
+        worldManager.worldChangeSetupconfig.worldId = 100;
+        worldManager.worldChangeSetupconfig.condition = "潜在職業　勇者以上";
+
+        worldManager.worldMasters = new List<WorldBaseMaster>();
+        WorldBaseMaster worldBaseFirstMaster = new WorldBaseMaster(2, "科学の世界", 1);
+        WorldBaseMaster worldBaseSecondMaster = new WorldBaseMaster(3, "闇の世界", 1);
+        WorldBaseMaster worldBaseThirdMaster = new WorldBaseMaster(5, "勇者軍の世界", 1);
+
+        worldBaseFirstMaster.startRole = new RoleMaster();
+        worldBaseFirstMaster.startRole.id = 1;
+        worldBaseFirstMaster.startRole.name = "実験台";
+        worldBaseFirstMaster.startRole.whiteCommands = new List<OtherWorldBaseProduct.Shared.Model.CommandMaster>();
+
+        worldBaseSecondMaster.startRole = new RoleMaster();
+        worldBaseSecondMaster.startRole.id = 1;
+        worldBaseSecondMaster.startRole.name = "闇魔法の後継者";
+        worldBaseSecondMaster.startRole.whiteCommands = new List<OtherWorldBaseProduct.Shared.Model.CommandMaster>();
+
+
+        worldBaseThirdMaster.startRole = new RoleMaster();
+        worldBaseThirdMaster.startRole.id = 1;
+        worldBaseThirdMaster.startRole.name = "勇者のおまけ（イレギュラー）";
+        worldBaseThirdMaster.startRole.whiteCommands = new List<OtherWorldBaseProduct.Shared.Model.CommandMaster>();
+        OtherWorldBaseProduct.Shared.Model.CommandMaster eatCommand = new OtherWorldBaseProduct.Shared.Model.CommandMaster();
+        eatCommand.id = 1;
+        eatCommand.name = "食べる";
+        eatCommand.effectName = "体力回復";
+        worldBaseThirdMaster.startRole.whiteCommands.Add(eatCommand);
+
+
+        worldManager.worldMasters.Add(worldBaseFirstMaster);
+        worldManager.worldMasters.Add(worldBaseSecondMaster);
+        worldManager.worldMasters.Add(worldBaseThirdMaster);
+
+
+    }
+}

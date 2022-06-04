@@ -1,0 +1,74 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">OtherWorldBaseProduct</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="simulator/world_warp_opening">
+                <span class="oi oi-plus" aria-hidden="true"></span> 転生シミュレータ(世界に入るまで)
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="simulator/world_caffeteria">
+                <span class="oi oi-plus" aria-hidden="true"></span> 食堂シミュレータ
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="world_master">
+                <span class="oi oi-plus" aria-hidden="true"></span> 転生先セットアップ
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="howtow">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> ソフトの使い方
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="client_data_manager">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> クライアント用データ管理ツール
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="data_report">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> データ出力レポート
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="area_master">
+                <span class="oi oi-plus" aria-hidden="true"></span> ワールド内エリア情報
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="command_master">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> 発動可能コマンド一覧
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="world_character_master">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> 世界キャラクター設定
+            </NavLink>
+        </div>
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

@@ -1,0 +1,34 @@
+﻿@page "/data_report"
+@using OtherWorldBaseProduct.Shared
+@inject HttpClient Http
+
+<PageTitle>データレポート</PageTitle>
+
+<h1>データチェッカー</h1>
+
+<h2 style="border-bottom">現在のデータ一覧</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>データ名</td>
+            <td>件数</td>
+            <td>データ状況</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>ワールド</td>
+            <td>1</td>
+            <td>正常 1件</td>
+        </tr>
+    </tbody>
+</table>
+
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+}

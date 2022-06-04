@@ -1,0 +1,87 @@
+@startuml
+package PackageOtherWorld {
+    package Model{
+        package Food {
+            class FoodResult {
+                foodData
+            }
+            class Fooddata {
+                Name
+                Cal
+            }
+        }
+        class RoleMaster {
+            id
+            name 
+            whiteCommands
+        }
+        class CommandMaster {
+            name
+            effectName
+        }
+        class Vector3 {
+            x
+            y
+            z
+        }
+    }
+    package ServerData <<DataBase>> {
+        class WorldChangeSetupconfig
+        {
+            worldId 
+            condition
+        }
+
+        class WorldBaseMaster
+        {
+            id
+            name 
+            areaid
+            startPosition 
+            startRole 
+        }
+
+        class WorldManager
+        {
+            worldMasters
+            worldChangeSetupconfig
+
+            IdColNum
+            NameColNum
+            AreaColNum
+
+            StartXColNum
+            StartYColNum 
+            StartZColNum 
+
+            DelimiterStr 
+
+            WorldIdnum
+            ConditionNum
+
+        }
+
+    }
+
+    package Viewdata {
+        class ClientDataVersion
+        {
+                id
+                version
+                updateDateTime
+        }
+        class ClientDataHistory
+        {
+
+                id 
+                createDateTime 
+                comment
+                updateDateTime 
+        }
+
+    }
+
+
+}
+
+@enduml

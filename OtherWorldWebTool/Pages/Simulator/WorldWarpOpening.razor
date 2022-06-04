@@ -1,0 +1,128 @@
+﻿@page "/simulator/world_warp_opening"
+@using OtherWorldBaseProduct.Shared
+@using OtherWorldBaseProduct.Shared.ServerData
+
+<PageTitle>転生オープニングシミュレータ(WorldWarpOpening)</PageTitle>
+
+
+<h1>転生オープニングシミュレータ(WorldWarpOpening)</h1>
+
+@if (worldClickCnt == 0)
+{
+    <h2 style="border-bottom: solid 4px;">ワールド選択</h2>
+    <select @onchange="WorldSelectChange">
+        @for(var i = 0; i < worldManager.worldMasters.Count; i++)
+        {
+            <option value="@i">@worldManager.worldMasters[i].name (@worldManager.worldMasters[i].id)</option>
+        }
+    </select>
+
+    <h2>転生先候補情報</h2>
+    <table class="table">
+        <tr>
+            <td style="background-color:lightblue">転生先世界名</td>
+            <td>@selectWorld.name</td>
+        </tr>
+
+        <tr>
+            <td style="background-color:lightblue">転生先エリアid</td>
+            <td>@selectWorld.areaid</td>
+        </tr>
+
+        <tr>
+            <td style="background-color:lightblue" colspan="2">転生先初期座標</td>
+        </tr>
+        <tr>
+            <td>X座標</td>
+            <td>@selectWorld.startPosition.x</td>
+        </tr>
+        <tr>
+            <td>Y座標</td>
+            <td>@selectWorld.startPosition.y</td>
+        </tr>
+        <tr>
+            <td>Z座標</td>
+            <td>@selectWorld.startPosition.z</td>
+        </tr>
+
+    </table>
+
+    <button @onclick="NextTurn">転生を開始する</button>
+    
+}
+
+@if (worldClickCnt == 1)
+{
+    <h2 style="border-bottom: solid 4px;">転生可能確認</h2>
+    @if (isWaiting)
+    {
+        <h2 style="border-bottom: solid 4px;">転生確認中です...</h2>
+
+    }
+    else
+    {
+        <h2 style="border-bottom: solid 4px;">世界検査完了いたしました。</h2>
+        <h3>世界エラー件数 : @validateErrors.Count </h3>
+        @if (@validateErrors.Count > 0)
+        {
+            <h4>世界エラー理由一覧 </h4>            
+            @foreach (var validateError in validateErrors)
+            {
+                <div>validateError</div>
+            }
+        }
+    }
+}
+
+
+@code {
+
+    private WorldManager worldManager { get; set; }
+
+    private WorldBaseMaster selectWorld { get; set; }
+
+    private int worldClickCnt { get; set; }
+
+    private int selectWorldIdx { get; set; }
+
+    private List<String> validateErrors { get; set; }
+
+    private bool isWaiting { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        isWaiting = true;
+        validateErrors = new List<string>();
+        worldManager = new WorldManager();
+        worldManager.DataRead();
+        selectWorldIdx = 0;
+        selectWorld = worldManager.worldMasters[selectWorldIdx];
+    }
+    void WorldSelectChange(ChangeEventArgs e)
+    {
+        if (e.Value is not null)
+        {
+            selectWorldIdx = int.Parse(e.Value.ToString()); 
+            selectWorld = worldManager.worldMasters[selectWorldIdx];
+        }
+    }
+
+    private void NextTurn()
+    {
+        worldClickCnt++;
+        ValidationWorld();
+    }
+
+    private async void ValidationWorld()
+    {
+        // 転生先の初期情報を確認
+        isWaiting = true;
+        await Task.Delay(3000);
+        if (worldManager.worldChangeSetupconfig.condition == "")
+        {
+            validateErrors.Add("転生先への注意事項が未記入です");
+        }
+        isWaiting = false;
+        
+    }
+}

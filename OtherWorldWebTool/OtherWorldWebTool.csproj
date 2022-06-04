@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\setup_config.csv" />
+    <Content Remove="wwwroot\world_base_master.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\setup_config.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="wwwroot\world_base_master.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OtherWorldBaseProduct\Shared\OtherWorldBaseProduct.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
